@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+    <Resource name="jdbc/ecommDS"
+              auth="Container"
+              type="javax.sql.DataSource"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/search_project"
+              username="postgres"
+              password="4Eboxar1"
+              maxActive="8"
+              maxIdle="8"
+              initialSize="1"
+              maxWait="50000"/>
+</Context>
