@@ -1,4 +1,4 @@
-<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/vendor/vendor.css" type="text/css"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/shop/css/app.css" type="text/css"/>

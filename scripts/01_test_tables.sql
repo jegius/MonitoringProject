@@ -6,6 +6,7 @@ Drop TABLE IF EXISTS searches CASCADE;
 Drop TABLE IF EXISTS searchitem CASCADE;
 Drop TABLE IF EXISTS roles CASCADE;
 
+
 --
 -- Name: users; Type: TABLE; Schema: public
 --

@@ -18,7 +18,7 @@
                 <div class="ui two column centered grid">
                     <div class="column">
                         <button class="ui fluid animated primary button" type="submit">
-                            <div class="visible content">Login</div>
+                            <div class="visible content">Войти</div>
                             <div class="hidden content">
                                 <i class="right arrow icon"></i>
                             </div>

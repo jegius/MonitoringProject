@@ -18,9 +18,19 @@ import static ru.ncedu.ecomm.utils.RedirectUtil.redirectToPage;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
+    private static final String NAME = "name";
+    private static final String PASSWORD = "password";
+    private static final String ANSWER = "answer";
+    private static final String USER_ID = "userId";
+    private static final String ROLE_ID = "roleId";
+
+
+    private static final String ERROR_MESSAGE = "Неверное Имя пользоватея или пароль!";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html; charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         req.getRequestDispatcher(Configuration.getProperty("page.login")).forward(req, resp);
     }
 
@@ -30,16 +40,21 @@ public class LoginServlet extends HttpServlet {
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        String password = req.getParameter("password");
         HttpSession session = req.getSession();
-        String passwordDigest = EncryptionUtils.getMd5Digest(password);
+
+        String name = req.getParameter(NAME);
+        String password = req.getParameter(PASSWORD);
+
         User user = getDAOFactory().getUserDAO().getUserByName(name);
+        String passwordDigest = password;
+                //EncryptionUtils.getMd5Digest(password);
+
         if (user != null && user.getPassword().equals(passwordDigest)) {
-            session.setAttribute("userId", user.getId());
+            session.setAttribute(USER_ID, user.getId());
+            session.setAttribute(ROLE_ID, user.getRoleId());
             redirectToPage(req, resp, Configuration.getProperty("servlet.home"));
         } else {
-            req.setAttribute("answer", "Неверное Имя пользоватея или пароль!");
+            req.setAttribute(ANSWER, ERROR_MESSAGE);
             req.getRequestDispatcher(Configuration.getProperty("page.login")).forward(req, resp);
         }
     }
