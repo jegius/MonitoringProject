@@ -4,7 +4,7 @@
 Drop TABLE IF EXISTS users CASCADE;
 Drop TABLE IF EXISTS searches CASCADE;
 Drop TABLE IF EXISTS searchitem CASCADE;
-
+Drop TABLE IF EXISTS roles CASCADE;
 
 --
 -- Name: users; Type: TABLE; Schema: public
@@ -12,6 +12,7 @@ Drop TABLE IF EXISTS searchitem CASCADE;
 
 CREATE TABLE users (
   user_id bigint NOT NULL PRIMARY KEY,
+  role_id bigint,
   login character varying,
   password character varying(1000) NOT NULL
 );
@@ -32,25 +33,25 @@ CACHE 1;
 --
 
 CREATE TABLE search (
-    search_id bigint NOT NULL PRIMARY KEY,
-    user_id bigint,
-    product_quantity bigint,
-    creation_date date NOT NULL
+  search_id bigint NOT NULL PRIMARY KEY,
+  user_id bigint,
+  product_quantity bigint,
+  creation_date date NOT NULL
 );
 
 --
--- Name: categories_category_id_seq; Type: SEQUENCE; Schema: public 
+-- Name: categories_category_id_seq; Type: SEQUENCE; Schema: public
 --
 
 CREATE SEQUENCE search_search_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
 
 --
--- Name: categories_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public 
+-- Name: categories_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public
 --
 ALTER TABLE search ALTER COLUMN search_id SET DEFAULT nextval('search_search_id_seq');
 ALTER SEQUENCE search_search_id_seq OWNED BY search.search_id;
@@ -83,6 +84,36 @@ CACHE 1;
 ALTER TABLE search_item ALTER COLUMN search_item_id SET DEFAULT nextval('search_search_item_seq');
 ALTER SEQUENCE search_search_item_seq OWNED BY search_item.search_item_id;
 
+--
+-- Name: roles; Type: TABLE; Schema: public
+--
+
+CREATE TABLE roles (
+  role_id bigint NOT NULL PRIMARY KEY,
+  name character varying(100) NOT NULL
+);
+
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE; Schema: public
+--
+
+CREATE SEQUENCE roles_role_id_seq
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public
+--
+ALTER TABLE roles ALTER COLUMN role_id SET DEFAULT nextval('roles_role_id_seq');
+ALTER SEQUENCE roles_role_id_seq OWNED BY roles.role_id;
+
+INSERT INTO roles(name)
+VALUES ('SuperUser'),
+  ('Users');
 
 
 ALTER TABLE ONLY users
@@ -93,3 +124,8 @@ ALTER TABLE ONLY search
 
 ALTER TABLE ONLY search_item
   ADD CONSTRAINT "	FK_search_search_item" FOREIGN KEY (search_id) REFERENCES search(search_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER SEQUENCE users_user_id_seq RESTART WITH 0;
+ALTER SEQUENCE search_search_id_seq RESTART WITH 0;
+ALTER SEQUENCE search_search_item_seq RESTART WITH 0;
+ALTER SEQUENCE roles_role_id_seq RESTART WITH 0;

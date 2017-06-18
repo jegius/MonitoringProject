@@ -4,16 +4,16 @@
         <div class="column">
             <h2 class="ui center aligned icon header">
                 <i class="circular sign in icon"></i>
-                Login
+                Войти в систему
             </h2>
             <form class="ui equal dividing width form" action="${pageContext.request.contextPath}/login" method="post">
                 <div class="field">
-                    <label> Your E-mail: </label>
-                    <input type="text" name="email" placeholder="E-mail">
+                    <label> Введите имя пользователя: </label>
+                    <input type="text" name="name" placeholder="Иия Пользователя">
                 </div>
                 <div class="field">
-                    <label> Your Password: </label>
-                    <input type="password" name="password" placeholder="Password">
+                    <label> Введите Пароль: </label>
+                    <input type="password" name="password" placeholder="Пароль">
                 </div>
                 <div class="ui two column centered grid">
                     <div class="column">

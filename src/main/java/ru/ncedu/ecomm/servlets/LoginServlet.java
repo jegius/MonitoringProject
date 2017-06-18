@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("userId", user.getId());
             redirectToPage(req, resp, Configuration.getProperty("servlet.home"));
         } else {
-            req.setAttribute("answer", "Uncorrect user! Check email and password");
+            req.setAttribute("answer", "Неверное Имя пользоватея или пароль!");
             req.getRequestDispatcher(Configuration.getProperty("page.login")).forward(req, resp);
         }
     }

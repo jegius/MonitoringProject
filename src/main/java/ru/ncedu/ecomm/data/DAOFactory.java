@@ -1,15 +1,14 @@
 package ru.ncedu.ecomm.data;
 
 import ru.ncedu.ecomm.Configuration;
-import ru.ncedu.ecomm.data.accessobjects.UserDAO;
-import ru.ncedu.ecomm.data.accessobjects.impl.PostgreseUserDAO;
+import ru.ncedu.ecomm.data.accessobjects.*;
+import ru.ncedu.ecomm.data.accessobjects.impl.*;
 
 public abstract class DAOFactory {
 
-    public abstract UserDAO getUserDAO();
+    public abstract RoleDAO getRoleDAO();
 
-    // public abstract CategoryDAO getCategoryDAO();
-    // another DAO...
+    public abstract UserDAO getUserDAO();
 
     public static DAOFactory getDAOFactory() {
 
@@ -18,8 +17,13 @@ public abstract class DAOFactory {
                 return new DAOFactory() {
 
                     @Override
+                    public RoleDAO getRoleDAO() {
+                        return new PostgresRoleDAO();
+                    }
+
+                    @Override
                     public UserDAO getUserDAO() {
-                        return new PostgreseUserDAO();
+                        return new PostgresUserDAO();
                     }
 
                 };

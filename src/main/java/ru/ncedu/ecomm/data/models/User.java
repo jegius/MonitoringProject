@@ -2,16 +2,26 @@ package ru.ncedu.ecomm.data.models;
 
 public class User {
     private long id;
+    private long roleId;
     private String name;
     private String password;
 
     public User() {
     }
 
-    public User(long id, String name, String password) {
+    public User(long id, long roleId, String name, String password) {
         this.id = id;
+        this.roleId = roleId;
         this.name = name;
         this.password = password;
+    }
+
+    public long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
     }
 
     public long getId() {
