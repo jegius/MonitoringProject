@@ -2,38 +2,37 @@
 <%@ page import="ru.ncedu.ecomm.utils.JSONUtils" %>
 
 <div class="ui text container jsEtalonComponent">
-    <form class="ui form">
-
-        <div class="field">
-            <label>User Input</label>
-            <input type="text" class="jsInput" value="${requestScope.initialValue}">
-        </div>
-
-        <%-- showCheckbox param usage. Params are received from the parent JSP. --%>
-        <c:if test="${param.showCheckbox.equals('true')}">
+    <h2 class="ui center aligned icon header">
+        <i class="circular users icon"></i>
+        Пользователи:
+    </h2>
+    <div class="ui form">
+        <div class="three fields">
             <div class="field">
-                <div class="ui checkbox">
-                    <input type="checkbox" tabindex="0" class="hidden">
-                    <label>Checkbox</label>
-                </div>
+                <label>Роль:</label>
+                <select class="ui dropdown">
+                    <c:forEach items="${requestScope.roles}" var="role">
+                        <option value="${role.id}">${role.name}</option>
+                    </c:forEach>
+                </select>
             </div>
-        </c:if>
-
-        <div class="field">
-            <button type="button" class="ui primary button jsPrint">
-                Print
-            </button>
-            <button type="reset" class="ui button">
-                Discard
-            </button>
+            <div class="field">
+                <label>Имя пользователя:</label>
+                <input type="text" placeholder="Введите имя">
+            </div>
+            <div class="field">
+                <label>Пароль:</label>
+                <input type="text" placeholder="Введите пароль">
+            </div>
         </div>
-
-    </form>
+        <div class="ui submit button">Добавить</div>
+    </div>
 </div>
 
 <%-- JS controller initilization --%>
 <script type="text/javascript">
     window.frm.components.init('EtalonComponent', '.jsEtalonComponent', {
         // Roles should be converted to JSON, in order to be handled as a JS object
+        roles: <%= JSONUtils.toJSON(request.getAttribute("roles")) %>
     });
 </script>

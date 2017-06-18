@@ -21,8 +21,8 @@ public class LoginServlet extends HttpServlet {
     private static final String NAME = "name";
     private static final String PASSWORD = "password";
     private static final String ANSWER = "answer";
-    private static final String USER_ID = "userId";
     private static final String ROLE_ID = "roleId";
+    private static final String USER = "user";
 
 
     private static final String ERROR_MESSAGE = "Неверное Имя пользоватея или пароль!";
@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
                 //EncryptionUtils.getMd5Digest(password);
 
         if (user != null && user.getPassword().equals(passwordDigest)) {
-            session.setAttribute(USER_ID, user.getId());
+            session.setAttribute(USER, user);
             session.setAttribute(ROLE_ID, user.getRoleId());
             redirectToPage(req, resp, Configuration.getProperty("servlet.home"));
         } else {
