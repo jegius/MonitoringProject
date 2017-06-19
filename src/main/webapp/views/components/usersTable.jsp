@@ -18,7 +18,7 @@
         <c:forEach items="${requestScope.viewModelUser}" var="user">
         <tr>
             <td class="collapsing">
-                <button class="circular ui icon button">
+                <button class="circular ui icon button jsRemoveUser" value="${user.id}">
                     <i class="red remove icon"></i>
                 </button>
             </td>
@@ -33,5 +33,7 @@
 
 <%-- JS controller initilization --%>
 <script type="text/javascript">
-    window.frm.components.init('UserTable', '.jsUserTable');
+    window.frm.components.init('UserTable', '.jsUserTable', {
+        userTableUrl: '${pageContext.request.contextPath}'
+    });
 </script>

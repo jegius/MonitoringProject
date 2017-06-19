@@ -1,5 +1,19 @@
 (function ($, window) {
 
+    var ELEMENTS = {
+        REMOVE_BUTTON: '.jsRemoveUser'
+    };
+
+    var ACTIONS = {
+        REMOVE: 'remove',
+        CLICK: 'click'
+    };
+
+    var LINKS = {
+        MANAGEMENT: '/management'
+    };
+
+
     var frm = window.frm;
 
     var UserTableComponent = frm.inheritance.inherits(frm.components.Component, {
@@ -8,31 +22,17 @@
          * Executed on component initialization
          */
         init: function () {
-            this.content.find('.ui.checkbox').checkbox();
-            this.content.find('.ui.dropdown').dropdown();
-            this.content.find('.jsPrint').on('click', this.onButtonClick.bind(this));
-        },
 
-        /**
-         * Executed on document readiness
-         */
-        onDocumentReady: function () {
-            this.printRoles();
+            this.content.find(ELEMENTS.REMOVE_BUTTON).on(ACTIONS.CLICK, this.removeUser());
         },
+        removeUser: function () {
+            var $this = $(this);
+            var $userId = $this.val();
 
-        /**
-         * Prints roles retrieved from request
-         */
-        printRoles: function () {
-            console.log('Roles:');
-            this.params.roles.forEach(function (role) {
-                console.log(role.id + ' - ' + role.name);
-            });
-        },
-
-        onButtonClick: function () {
-            var input = this.content.find('.jsInput').val();
-            alert(input);
+            $.post(this.params.userTableUrl + LINKS.MANAGEMENT,{
+                action: ACTIONS.REMOVE,
+                userId: $userId
+            })
         }
 
     });
