@@ -2,6 +2,7 @@
 
     var ELEMENTS = {
         USER_ROLE_SELECTOR: '.jsAddUserDropdown',
+        USER_ROLE_SELECTOR_OPTION: '.jsAddUserDropdown option:selected',
         ADD_USER_FORM: '.jsAddUserForm',
         NAME_INPUT: '.jsUserName',
         PASSWORD_INPUT: '.jsPassword',
@@ -38,7 +39,7 @@
             var $this = $(event.currentTarget);
             var $parentElement = $this.closest(ELEMENTS.ADD_USER_FORM);
             var $userName = $parentElement.find(ELEMENTS.NAME_INPUT).val();
-            var $userRole = $parentElement.find(ELEMENTS.USER_ROLE);
+            var $userRole = $parentElement.find(ELEMENTS.USER_ROLE_SELECTOR_OPTION).val();
             var $userPassword = $parentElement.find(ELEMENTS.PASSWORD_INPUT).val();
             $.post(
                 this.params.addUserUrl + LINKS.MANAGEMENT, {
@@ -47,14 +48,20 @@
                     role: $userRole,
                     password: $userPassword
                 }, function () {
+                    this.resetInputs();
                     frm.events.fire(EVENTS.REFRESH_PAGE);
-                }
+                }.bind(this)
+            );
+        },
 
-            )
+        resetInputs: function () {
+            this.content.find(ELEMENTS.NAME_INPUT).val('');
+            this.content.find(ELEMENTS.PASSWORD_INPUT).val('');
         }
+
 
     });
 
-    frm.components.register('UserManagement', UserManagementComponent);
+    frm.components.register('UserManagementComponent', UserManagementComponent);
 
 })(jQuery, window);

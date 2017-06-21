@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 Drop TABLE IF EXISTS users CASCADE;
-Drop TABLE IF EXISTS searches CASCADE;
-Drop TABLE IF EXISTS searchitem CASCADE;
+Drop TABLE IF EXISTS search CASCADE;
+Drop TABLE IF EXISTS search_item CASCADE;
 Drop TABLE IF EXISTS roles CASCADE;
 
 
@@ -14,8 +14,8 @@ Drop TABLE IF EXISTS roles CASCADE;
 CREATE TABLE users (
   user_id bigint NOT NULL PRIMARY KEY,
   role_id bigint,
-  login character varying,
-  password character varying(1000) NOT NULL
+  user_login character(200),
+  user_password character varying(1000) NOT NULL
 );
 
 --
@@ -29,6 +29,8 @@ NO MINVALUE
 NO MAXVALUE
 CACHE 1;
 
+ALTER TABLE users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_seq');
+ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
 --
 -- Name: categories; Type: TABLE; Schema: public
 --
@@ -65,7 +67,7 @@ CREATE TABLE search_item (
   search_item_id bigint NOT NULL PRIMARY KEY,
   search_id bigint,
   product_price bigint,
-  product_name character varying
+  product_name character (200)
 );
 
 --
@@ -126,7 +128,7 @@ ALTER TABLE ONLY search
 ALTER TABLE ONLY search_item
   ADD CONSTRAINT "	FK_search_search_item" FOREIGN KEY (search_id) REFERENCES search(search_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER SEQUENCE users_user_id_seq RESTART WITH 0;
-ALTER SEQUENCE search_search_id_seq RESTART WITH 0;
-ALTER SEQUENCE search_search_item_seq RESTART WITH 0;
-ALTER SEQUENCE roles_role_id_seq RESTART WITH 0;
+ALTER SEQUENCE users_user_id_seq RESTART WITH 1;
+ALTER SEQUENCE search_search_id_seq RESTART WITH 1;
+ALTER SEQUENCE search_search_item_seq RESTART WITH 1;
+ALTER SEQUENCE roles_role_id_seq RESTART WITH 1;

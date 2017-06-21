@@ -13,8 +13,8 @@ public class PostgresUserDAO implements UserDAO {
 
     private static final String ID = "user_id";
     private static final String ROLE_ID = "role_id";
-    private static final String PASSWORD = "password";
-    private static final String LOGIN = "login";
+    private static final String PASSWORD = "user_password";
+    private static final String LOGIN = "user_login";
 
 
 
@@ -29,8 +29,8 @@ public class PostgresUserDAO implements UserDAO {
                     "SELECT\n" +
                             "  user_id,\n" +
                             "  role_id,\n" +
-                            "  password,\n" +
-                            "  login\n" +
+                            "  user_password,\n" +
+                            "  user_login\n" +
                             "FROM users");
             while (resultSet.next()) {
                 User user = new UserBuilder()
@@ -60,10 +60,11 @@ public class PostgresUserDAO implements UserDAO {
                     "SELECT\n" +
                             "  user_id,\n" +
                             "  role_id,\n" +
-                            "  password,\n" +
-                            "  login\n" +
+                            "  user_login,\n" +
+                            "  user_password\n" +
                             "FROM users\n" +
-                            "WHERE login = ?")){
+                            "WHERE user_login = ?" +
+                            "ORDER BY user_id ASC ")){
 
             statement.setString(1, name);
 
@@ -90,9 +91,9 @@ public class PostgresUserDAO implements UserDAO {
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO users\n" +
                              "(role_id,\n" +
-                             " password,\n" +
-                             " login)\n" +
-                             "VALUES (?, ?, ?, ?)\n" +
+                             " user_password,\n" +
+                             " user_login)\n" +
+                             "VALUES (?, ?, ?)\n" +
                              "RETURNING user_id")) {
 
             statement.setLong(1, user.getRoleId());
@@ -111,5 +112,75 @@ public class PostgresUserDAO implements UserDAO {
             throw new RuntimeException(e);
         }
         return user;
+    }
+
+    @Override
+    public User updateUser(User user) {
+
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE users\n" +
+                             "SET role_id     = ?,\n" +
+                             "  user_password     = ?,\n" +
+                             "  user_login      = ?\n" +
+                             "WHERE user_id = ?")) {
+            statement.setLong(1, user.getRoleId());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getName());
+            statement.setLong(4, user.getId());
+            statement.execute();
+
+            return user;
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void removeUser(long userId) {
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM users\n" +
+                             "WHERE user_id = ?")) {
+            statement.setLong(1, userId);
+            statement.execute();
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public User getUserById(long userId) {
+        try(Connection connection = DBUtils.getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT\n" +
+                            "  user_id,\n" +
+                            "  role_id,\n" +
+                            "  user_login,\n" +
+                            "  user_password\n" +
+                            "FROM users\n" +
+                            "WHERE user_id = ?" +
+                            "ORDER BY user_id ASC")){
+
+            statement.setLong(1, userId);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+
+                return new UserBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setRoleId(resultSet.getLong(ROLE_ID))
+                        .setPassword(resultSet.getString(PASSWORD))
+                        .setName(resultSet.getString(LOGIN))
+                        .build();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
 }

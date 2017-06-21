@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ru.ncedu.ecomm.utils.JSONUtils" %>
 
-<div class="ui text container jsUserManagement">
+<div class="ui text container jsUserManagementComponent">
     <h2 class="ui center aligned icon header">
         <i class="circular users icon"></i>
         Пользователи:
@@ -31,8 +30,7 @@
 
 <%-- JS controller initilization --%>
 <script type="text/javascript">
-    window.frm.components.init('UserManagement', '.jsUserManagement', {
-        // Roles should be converted to JSON, in order to be handled as a JS object
+    window.frm.components.init('UserManagementComponent', '.jsUserManagementComponent', {
         addUserUrl: '${pageContext.request.contextPath}'
     });
 </script>

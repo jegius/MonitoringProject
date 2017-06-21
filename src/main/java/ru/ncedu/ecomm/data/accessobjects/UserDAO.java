@@ -10,4 +10,10 @@ public interface UserDAO {
     User getUserByName(String name);
 
     User addUser(User user);
+
+    User updateUser(User user);
+
+    void removeUser(long userId);
+
+    User getUserById(long userId);
 }

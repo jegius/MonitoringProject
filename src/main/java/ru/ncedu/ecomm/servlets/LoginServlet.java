@@ -43,13 +43,11 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = req.getSession();
 
         String name = req.getParameter(NAME);
-        String password = req.getParameter(PASSWORD);
+        String password = EncryptionUtils.getMd5Digest(req.getParameter(PASSWORD));
 
         User user = getDAOFactory().getUserDAO().getUserByName(name);
-        String passwordDigest = password;
-                //EncryptionUtils.getMd5Digest(password);
 
-        if (user != null && user.getPassword().equals(passwordDigest)) {
+        if (user != null && user.getPassword().equals(password)) {
             session.setAttribute(USER, user);
             session.setAttribute(ROLE_ID, user.getRoleId());
             redirectToPage(req, resp, Configuration.getProperty("servlet.home"));
