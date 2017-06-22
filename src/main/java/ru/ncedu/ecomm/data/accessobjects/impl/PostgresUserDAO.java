@@ -163,7 +163,8 @@ public class PostgresUserDAO implements UserDAO {
                             "  user_password\n" +
                             "FROM users\n" +
                             "WHERE user_id = ?" +
-                            "ORDER BY user_id ASC")){
+                            "ORDER BY user_id ASC, " +
+                            "role_id ASC")){
 
             statement.setLong(1, userId);
 

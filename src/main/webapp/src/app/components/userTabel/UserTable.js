@@ -7,6 +7,10 @@
         USER_ROLE_SELECTOR_OPTION: '.jsAddUserDropdown option:selected',
         MAIN_CONTAINER: '.jsUserTableComponent',
         TABLE_ROW: '.jsUserInfoRow',
+        CHANGE_PASSWORD_CONTAINER: '.jsChangePasswordContainer',
+        NEW_PASSWORD_INPUT: '.jsNewPassword',
+        USER_ID_FOR_CHANGE_PASSWORD: '.userIdForChangePassword',
+        CHANGE_PASSWORD_BUTTON: '.jsChangePassword',
         USER_ID: '.jsUserId'
     };
 
@@ -38,6 +42,7 @@
             this.content.find(ELEMENTS.USER_ROLE_SELECTOR).dropdown();
             this.content.find(ELEMENTS.REMOVE_BUTTON).on(ACTIONS.CLICK, this.removeUser.bind(this));
             this.content.find(ELEMENTS.USER_ROLE_SELECTOR).change(this.updateUserRole.bind(this));
+            this.content.find(ELEMENTS.CHANGE_PASSWORD_BUTTON).on(ACTIONS.CLICK, this.changePassword.bind(this))
         },
 
         removeUser: function (event) {
@@ -61,6 +66,28 @@
 
                     this.content.find(ELEMENTS.REMOVE_BUTTON).on(ACTIONS.CLICK, this.removeUser.bind(this));
                     this.content.find(ELEMENTS.USER_ROLE_SELECTOR).change(this.updateUserRole.bind(this));
+                    this.content.find(ELEMENTS.CHANGE_PASSWORD_BUTTON).on(ACTIONS.CLICK, this.changePassword.bind(this))
+
+                }.bind(this))
+        },
+        changePassword: function (event) {
+            var $this = $(event.currentTarget);
+            var $buttonContainer = $this.closest(ELEMENTS.CHANGE_PASSWORD_CONTAINER);
+            var $password = $buttonContainer.find(ELEMENTS.NEW_PASSWORD_INPUT).val();
+
+            if ($password.length < 3){
+                return;
+            }
+
+            var $userId = $buttonContainer.find(ELEMENTS.USER_ID_FOR_CHANGE_PASSWORD).val();
+
+            $.post(this.params.userTableUrl + LINKS.MANAGEMENT,
+                {
+                    action: ACTIONS.UPDATE,
+                    password: $password,
+                    userId: $userId
+                },function () {
+                    this.refreshPage();
 
                 }.bind(this))
         },
@@ -76,10 +103,7 @@
                     action: ACTIONS.UPDATE,
                     roleId: roleId,
                     userId: userId
-                },
-
-                function () {
-
+                },function () {
                     this.refreshPage();
 
                 }.bind(this))

@@ -95,7 +95,9 @@ public class UserManagement extends HttpServlet {
     }
 
     private void updateUser(HttpServletRequest req, HttpServletResponse resp) {
-        if (req.getParameter(USER_ID) != null && req.getParameter(ROLE_ID) != null) {
+        if (req.getParameter(USER_ID) != null
+                && req.getParameter(ROLE_ID) != null) {
+
             long userId = Long.parseLong(req.getParameter(USER_ID));
             long roleId = Long.parseLong(req.getParameter(ROLE_ID));
 
@@ -112,6 +114,25 @@ public class UserManagement extends HttpServlet {
                         .getUserDAO()
                         .updateUser(userForUpdate);
             }
+
+        } else if (req.getParameter(PASSWORD) != null
+                && req.getParameter(USER_ID) != null) {
+
+            long userId = Long.parseLong(req.getParameter(USER_ID));
+            String password = EncryptionUtils.getMd5Digest(req.getParameter(PASSWORD));
+
+            User userForUpdate = DAOFactory
+                    .getDAOFactory()
+                    .getUserDAO()
+                    .getUserById(userId);
+
+            userForUpdate.setPassword(password);
+
+            DAOFactory
+                    .getDAOFactory()
+                    .getUserDAO()
+                    .updateUser(userForUpdate);
+
         }
     }
 
