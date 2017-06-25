@@ -7,6 +7,7 @@
             <a href="${pageContext.request.contextPath}/management" class="item"><i class="users icon"></i>Управление
                 пользователями</a>
         </c:if>
+        <c:import url="../components/block/userInformation.jsp"/>
         <a href="${pageContext.request.contextPath}/logout" class="ui item right"><b><i
                 class="sign out icon"></i>Выйти</b></a>
     </div>

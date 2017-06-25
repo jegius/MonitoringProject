@@ -38,8 +38,10 @@ ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
 CREATE TABLE search (
   search_id bigint NOT NULL PRIMARY KEY,
   user_id bigint,
+  fele_path character,
   product_quantity bigint,
-  creation_date date NOT NULL
+  creation_date date NOT NULL,
+  last_search_date date NOT NULL
 );
 
 --
@@ -114,10 +116,6 @@ CACHE 1;
 ALTER TABLE roles ALTER COLUMN role_id SET DEFAULT nextval('roles_role_id_seq');
 ALTER SEQUENCE roles_role_id_seq OWNED BY roles.role_id;
 
-INSERT INTO roles(name)
-VALUES ('SuperUser'),
-  ('Users');
-
 
 ALTER TABLE ONLY users
   ADD CONSTRAINT "	FK_users_users" FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -132,3 +130,10 @@ ALTER SEQUENCE users_user_id_seq RESTART WITH 1;
 ALTER SEQUENCE search_search_id_seq RESTART WITH 1;
 ALTER SEQUENCE search_search_item_seq RESTART WITH 1;
 ALTER SEQUENCE roles_role_id_seq RESTART WITH 1;
+
+INSERT INTO roles(name)
+VALUES ('SuperUser'),
+  ('Users');
+
+INSERT INTO users(user_id, role_id, user_login, user_password)
+VALUES (1, 1, 'jegius', '20503573445431994242781524265713587176');

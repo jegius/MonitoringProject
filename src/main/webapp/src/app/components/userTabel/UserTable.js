@@ -63,7 +63,7 @@
                     var newTable = $data.find(ELEMENTS.USER_TABLE);
 
                     this.content.find(ELEMENTS.USER_TABLE).replaceWith(newTable);
-
+                    this.content.find(ELEMENTS.USER_ROLE_SELECTOR).dropdown();
                     this.content.find(ELEMENTS.REMOVE_BUTTON).on(ACTIONS.CLICK, this.removeUser.bind(this));
                     this.content.find(ELEMENTS.USER_ROLE_SELECTOR).change(this.updateUserRole.bind(this));
                     this.content.find(ELEMENTS.CHANGE_PASSWORD_BUTTON).on(ACTIONS.CLICK, this.changePassword.bind(this))

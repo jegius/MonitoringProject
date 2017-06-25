@@ -8,7 +8,7 @@
     - companyInfo
 --%>
 
-<%@ page contentType="text/html;charset=utf-8"  pageEncoding="utf-8" language="java" %>
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8" language="java" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -20,13 +20,11 @@
 </head>
 <body>
 
-    <c:import url="../fragments/topPanel.jsp"/>
-    <div class="ui container" style="height: 10em"></div>
-    <c:import url="../components/etalon.jsp">
-        <c:param name="showCheckbox" value="true"/>
-    </c:import>
-
-    <c:import url="../components/companyInfo.jsp"/>
-
+<c:import url="../fragments/topPanel.jsp"/>
+<div class="ui container jsContent" style="height: 10em">
+    <c:import url="../components/mainSearches.jsp"/>
+</div>
+<div class="ui container" style="height: 10em"></div>
+<c:import url="../components/block/addFileModal.jsp"/>
 </body>
 </html>
