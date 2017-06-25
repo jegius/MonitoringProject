@@ -92,6 +92,7 @@ public class UploadServlet extends HttpServlet {
                         if (!regexMatcher.find()) {
                             request.setAttribute(ERROR, ERROR_BAD_FILE_TYPE);
                             request.getRequestDispatcher(Configuration.getProperty("servlet.home")).forward(request, response);
+                            return;
                         }
 
                         String filePath = uploadPath + File.separator + fileName;
