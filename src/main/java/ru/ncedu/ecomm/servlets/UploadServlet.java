@@ -2,6 +2,7 @@ package ru.ncedu.ecomm.servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,6 +19,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import ru.ncedu.ecomm.Configuration;
+import ru.ncedu.ecomm.data.models.User;
 
 @WebServlet(name = "UploadServlet", urlPatterns = {"/upload"})
 
@@ -50,6 +52,8 @@ public class UploadServlet extends HttpServlet {
 
         if (isAuthorized) {
 
+        User thisUser = (User)session.getAttribute(USER);
+
             // checks if the request actually contains upload file
             if (!ServletFileUpload.isMultipartContent(request)) {
                 request.setAttribute(ERROR, ERROR_DOES_NOT_CONTAIN_DATA);
@@ -68,11 +72,15 @@ public class UploadServlet extends HttpServlet {
 
             // constructs the directory path to store upload file
             String uploadPath = getServletContext().getRealPath("")
-                    + File.separator + UPLOAD_DIRECTORY;
+                    + File.separator + UPLOAD_DIRECTORY
+                    + File.separator + thisUser.getId()
+                    + File.separator + new Date().getTime();
+
+
             // creates the directory if it does not exist
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+                uploadDir.mkdirs();
             }
 
             try {
@@ -87,7 +95,7 @@ public class UploadServlet extends HttpServlet {
 
                     // processes only fields that are not form fields
                     if (!item.isFormField()) {
-                        String fileName = new File(item.getName()).getName();
+                        String fileName = new String(new File(item.getName()).getName().getBytes("windows-1251"),"UTF-8");
                         Matcher regexMatcher = regex.matcher(fileName);
                         if (!regexMatcher.find()) {
                             request.setAttribute(ERROR, ERROR_BAD_FILE_TYPE);
@@ -95,7 +103,7 @@ public class UploadServlet extends HttpServlet {
                             return;
                         }
 
-                        String filePath = uploadPath + File.separator + fileName;
+                        String filePath = uploadPath + File.separator + new Date().getTime() + PATTERN;
                         File storeFile = new File(filePath);
 
                         // saves the file on disk

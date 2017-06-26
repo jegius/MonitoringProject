@@ -39,6 +39,7 @@ CREATE TABLE search (
   search_id bigint NOT NULL PRIMARY KEY,
   user_id bigint,
   fele_path character,
+  file_original_name character,
   product_quantity bigint,
   creation_date date NOT NULL,
   last_search_date date NOT NULL
