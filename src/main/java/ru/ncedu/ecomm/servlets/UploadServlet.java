@@ -30,6 +30,8 @@ public class UploadServlet extends HttpServlet {
     private static final String ERROR = "error";
     private static final String ANSWER = "answer";
     private static final String PATTERN = ".xls";
+    private static final String WIN_1251 = "windows-1251";
+    private static final String UTF_8 = "UTF-8";
     private static final String UPLOAD_DIRECTORY = "upload";
     private static final int THRESHOLD_SIZE = 1024 * 1024 * 3;  // 3MB
     private static final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
@@ -52,7 +54,7 @@ public class UploadServlet extends HttpServlet {
 
         if (isAuthorized) {
 
-        User thisUser = (User)session.getAttribute(USER);
+            User thisUser = (User) session.getAttribute(USER);
 
             // checks if the request actually contains upload file
             if (!ServletFileUpload.isMultipartContent(request)) {
@@ -78,34 +80,39 @@ public class UploadServlet extends HttpServlet {
 
 
             // creates the directory if it does not exist
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
 
             try {
                 // parses the request's content to extract file data
-                List formItems = upload.parseRequest(request);
-                Iterator iter = formItems.iterator();
+                List<FileItem> formItems = upload.parseRequest(request);
 
                 // iterates over form's fields
-                while (iter.hasNext()) {
-                    FileItem item = (FileItem) iter.next();
-
+                for (FileItem item : formItems) {
 
                     // processes only fields that are not form fields
                     if (!item.isFormField()) {
-                        String fileName = new String(new File(item.getName()).getName().getBytes("windows-1251"),"UTF-8");
+                        String fileName = new String(new File(item.getName())
+                                .getName()
+                                .getBytes(WIN_1251), UTF_8);
+
                         Matcher regexMatcher = regex.matcher(fileName);
                         if (!regexMatcher.find()) {
                             request.setAttribute(ERROR, ERROR_BAD_FILE_TYPE);
                             request.getRequestDispatcher(Configuration.getProperty("servlet.home")).forward(request, response);
                             return;
+                        } else {
+
+                            File uploadDir = new File(uploadPath);
+                            if (!uploadDir.exists()) {
+                                uploadDir.mkdirs();
+                            }
                         }
 
-                        String filePath = uploadPath + File.separator + new Date().getTime() + PATTERN;
-                        File storeFile = new File(filePath);
+                        String filePath = uploadPath
+                                + File.separator
+                                + new Date().getTime()
+                                + PATTERN;
 
+                        File storeFile = new File(filePath);
                         // saves the file on disk
                         item.write(storeFile);
                     }

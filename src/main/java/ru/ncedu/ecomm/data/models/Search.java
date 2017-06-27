@@ -6,6 +6,7 @@ public class Search {
     private long id;
     private long userId;
     private String filePath;
+    private String fileOriginalName;
     private Date creationDate;
     private Date lastSearchDate;
     private long productQuantity;
@@ -16,6 +17,7 @@ public class Search {
     public Search(long id,
                   long userId,
                   String filePath,
+                  String fileOriginalName,
                   Date creationDate,
                   Date lastSearchDate,
                   long productQuantity) {
@@ -23,9 +25,18 @@ public class Search {
         this.id = id;
         this.userId = userId;
         this.filePath = filePath;
+        this.fileOriginalName = fileOriginalName;
         this.creationDate = creationDate;
         this.lastSearchDate = lastSearchDate;
         this.productQuantity = productQuantity;
+    }
+
+    public String getFileOriginalName() {
+        return fileOriginalName;
+    }
+
+    public void setFileOriginalName(String fileOriginalName) {
+        this.fileOriginalName = fileOriginalName;
     }
 
     public Date getLastSearchDate() {

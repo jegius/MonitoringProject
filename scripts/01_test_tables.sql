@@ -38,8 +38,8 @@ ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
 CREATE TABLE search (
   search_id bigint NOT NULL PRIMARY KEY,
   user_id bigint,
-  fele_path character,
-  file_original_name character,
+  file_path character(200),
+  file_original_name character(200),
   product_quantity bigint,
   creation_date date NOT NULL,
   last_search_date date NOT NULL
