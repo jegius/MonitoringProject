@@ -2,6 +2,7 @@ package ru.ncedu.ecomm.servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import ru.ncedu.ecomm.Configuration;
+import ru.ncedu.ecomm.data.DAOFactory;
+import ru.ncedu.ecomm.data.models.Builders.SearchBuilder;
+import ru.ncedu.ecomm.data.models.Search;
 import ru.ncedu.ecomm.data.models.User;
 
 @WebServlet(name = "UploadServlet", urlPatterns = {"/upload"})
@@ -29,6 +33,7 @@ public class UploadServlet extends HttpServlet {
     private static final String USER = "user";
     private static final String ERROR = "error";
     private static final String ANSWER = "answer";
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String PATTERN = ".xls";
     private static final String WIN_1251 = "windows-1251";
     private static final String UTF_8 = "UTF-8";
@@ -115,6 +120,17 @@ public class UploadServlet extends HttpServlet {
                         File storeFile = new File(filePath);
                         // saves the file on disk
                         item.write(storeFile);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+                        String date = simpleDateFormat.format(new Date(DATE_FORMAT));
+
+                        Search search = new SearchBuilder()
+                                .setCreationDate(date)
+                                .setFilePath(uploadPath)
+                                .setFileOriginalName(fileName)
+                                .setUserId(thisUser.getId())
+                                .build();
+
+                        addSearch(search);
                     }
                 }
                 request.setAttribute(ANSWER, UPLOAD_SUCCESSFUL);
@@ -126,5 +142,12 @@ public class UploadServlet extends HttpServlet {
         } else {
             request.getRequestDispatcher(Configuration.getProperty("page.login")).forward(request, response);
         }
+    }
+
+    private void addSearch(Search search){
+        DAOFactory
+                .getDAOFactory()
+                .getSearchDAO()
+                .addNewSearch(search);
     }
 }

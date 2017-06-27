@@ -42,7 +42,7 @@ CREATE TABLE search (
   file_original_name character(200),
   product_quantity bigint,
   creation_date date NOT NULL,
-  last_search_date date NOT NULL
+  last_search_date date
 );
 
 --

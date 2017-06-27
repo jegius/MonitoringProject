@@ -34,8 +34,8 @@ public class PostgresSearchDAO implements SearchDAO {
             statement.setString(2, search.getFilePath());
             statement.setString(3, search.getFileOriginalName());
             statement.setLong(4, search.getProductQuantity());
-            statement.setDate(5, search.getCreationDate());
-            statement.setDate(6, search.getLastSearchDate());
+            statement.setString(5, search.getCreationDate());
+            statement.setString(6, search.getLastSearchDate());
             statement.execute();
 
             ResultSet resultSet = statement.getResultSet();

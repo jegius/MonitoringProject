@@ -7,8 +7,8 @@ public class Search {
     private long userId;
     private String filePath;
     private String fileOriginalName;
-    private Date creationDate;
-    private Date lastSearchDate;
+    private String creationDate;
+    private String lastSearchDate;
     private long productQuantity;
 
     public Search() {
@@ -18,8 +18,8 @@ public class Search {
                   long userId,
                   String filePath,
                   String fileOriginalName,
-                  Date creationDate,
-                  Date lastSearchDate,
+                  String creationDate,
+                  String lastSearchDate,
                   long productQuantity) {
 
         this.id = id;
@@ -39,11 +39,11 @@ public class Search {
         this.fileOriginalName = fileOriginalName;
     }
 
-    public Date getLastSearchDate() {
+    public String getLastSearchDate() {
         return lastSearchDate;
     }
 
-    public void setLastSearchDate(Date lastSearchDate) {
+    public void setLastSearchDate(String lastSearchDate) {
         this.lastSearchDate = lastSearchDate;
     }
 
@@ -71,11 +71,11 @@ public class Search {
         this.userId = userId;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 

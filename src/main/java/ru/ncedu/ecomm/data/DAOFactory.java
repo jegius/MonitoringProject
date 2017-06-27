@@ -10,6 +10,8 @@ public abstract class DAOFactory {
 
     public abstract UserDAO getUserDAO();
 
+    public abstract SearchDAO getSearchDAO();
+
     public static DAOFactory getDAOFactory() {
 
         switch (Configuration.getProperty("db.type")) {
@@ -26,6 +28,10 @@ public abstract class DAOFactory {
                         return new PostgresUserDAO();
                     }
 
+                    @Override
+                    public SearchDAO getSearchDAO() {
+                        return new PostgresSearchDAO();
+                    }
                 };
             default:
                 throw new UnsupportedOperationException("Unsupported DAO type");

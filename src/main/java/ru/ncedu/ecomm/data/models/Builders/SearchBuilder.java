@@ -2,14 +2,13 @@ package ru.ncedu.ecomm.data.models.Builders;
 
 import ru.ncedu.ecomm.data.models.Search;
 
-import java.sql.Date;
-
 public class SearchBuilder {
     private long id;
     private long userId;
+    private String fileOriginalName;
     private String filePath;
-    private Date creationDate;
-    private Date lastSearchDate;
+    private String creationDate;
+    private String lastSearchDate;
     private long productQuantity;
 
     public SearchBuilder() {
@@ -27,19 +26,25 @@ public class SearchBuilder {
         return this;
     }
 
+    public SearchBuilder setFileOriginalName(String fileOriginalName) {
+        this.fileOriginalName = fileOriginalName;
+
+        return this;
+    }
+
     public SearchBuilder setFilePath(String filePath) {
         this.filePath = filePath;
 
         return this;
     }
 
-    public SearchBuilder setCreationDate(Date creationDate) {
+    public SearchBuilder setCreationDate(String creationDate) {
         this.creationDate = creationDate;
 
         return this;
     }
 
-    public SearchBuilder setLastSearchDate(Date lastSearchDate) {
+    public SearchBuilder setLastSearchDate(String lastSearchDate) {
         this.lastSearchDate = lastSearchDate;
 
         return this;
@@ -56,6 +61,7 @@ public class SearchBuilder {
                 id,
                 userId,
                 filePath,
+                fileOriginalName,
                 creationDate,
                 lastSearchDate,
                 productQuantity
