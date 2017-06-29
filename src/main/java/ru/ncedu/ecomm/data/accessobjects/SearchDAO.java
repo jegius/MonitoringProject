@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SearchDAO {
 
-    List<Search> getSearches();
+    List<Search> getSearches(long userId);
 
     Search addNewSearch(Search search);
 

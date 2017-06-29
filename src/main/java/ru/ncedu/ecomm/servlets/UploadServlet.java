@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +32,7 @@ public class UploadServlet extends HttpServlet {
     private static final String USER = "user";
     private static final String ERROR = "error";
     private static final String ANSWER = "answer";
-    private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String PATTERN = ".xls";
     private static final String WIN_1251 = "windows-1251";
     private static final String UTF_8 = "UTF-8";
@@ -119,9 +118,8 @@ public class UploadServlet extends HttpServlet {
 
                         File storeFile = new File(filePath);
                         // saves the file on disk
-                        item.write(storeFile);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-                        String date = simpleDateFormat.format(new Date(DATE_FORMAT));
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+                        String date = simpleDateFormat.format(new Date());
 
                         Search search = new SearchBuilder()
                                 .setCreationDate(date)
@@ -130,7 +128,10 @@ public class UploadServlet extends HttpServlet {
                                 .setUserId(thisUser.getId())
                                 .build();
 
-                        addSearch(search);
+                        if (addSearch(search) != null) {
+                            item.write(storeFile);
+
+                        }
                     }
                 }
                 request.setAttribute(ANSWER, UPLOAD_SUCCESSFUL);
@@ -144,8 +145,8 @@ public class UploadServlet extends HttpServlet {
         }
     }
 
-    private void addSearch(Search search){
-        DAOFactory
+    private Search addSearch(Search search) {
+        return DAOFactory
                 .getDAOFactory()
                 .getSearchDAO()
                 .addNewSearch(search);
