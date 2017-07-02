@@ -24,6 +24,8 @@ import ru.ncedu.ecomm.data.models.Builders.SearchBuilder;
 import ru.ncedu.ecomm.data.models.Search;
 import ru.ncedu.ecomm.data.models.User;
 
+import static ru.ncedu.ecomm.utils.RedirectUtil.redirectToPage;
+
 @WebServlet(name = "UploadServlet", urlPatterns = {"/upload"})
 
 public class UploadServlet extends HttpServlet {
@@ -77,11 +79,11 @@ public class UploadServlet extends HttpServlet {
             upload.setSizeMax(MAX_REQUEST_SIZE);
 
             // constructs the directory path to store upload file
-            String uploadPath = getServletContext().getRealPath("")
-                    + File.separator + UPLOAD_DIRECTORY
+            String uploadPath = File.separator + UPLOAD_DIRECTORY
                     + File.separator + thisUser.getId()
                     + File.separator + new Date().getTime();
 
+            String contextPath = getServletContext().getRealPath("");
 
             // creates the directory if it does not exist
 
@@ -105,16 +107,19 @@ public class UploadServlet extends HttpServlet {
                             return;
                         } else {
 
-                            File uploadDir = new File(uploadPath);
+                            File uploadDir = new File(contextPath + uploadPath);
                             if (!uploadDir.exists()) {
                                 uploadDir.mkdirs();
                             }
                         }
 
-                        String filePath = uploadPath
-                                + File.separator
-                                + new Date().getTime()
+                        String newFileName = new Date()
+                                .getTime()
                                 + PATTERN;
+
+                        String filePath = contextPath + uploadPath
+                                + File.separator
+                                + newFileName;
 
                         File storeFile = new File(filePath);
                         // saves the file on disk
@@ -123,7 +128,8 @@ public class UploadServlet extends HttpServlet {
 
                         Search search = new SearchBuilder()
                                 .setCreationDate(date)
-                                .setFilePath(uploadPath)
+                                .setFileDirectoryPath(uploadPath)
+                                .setFilePath(uploadPath + File.separator + newFileName)
                                 .setFileOriginalName(fileName)
                                 .setUserId(thisUser.getId())
                                 .build();
@@ -135,13 +141,13 @@ public class UploadServlet extends HttpServlet {
                     }
                 }
                 request.setAttribute(ANSWER, UPLOAD_SUCCESSFUL);
-                request.getRequestDispatcher(Configuration.getProperty("servlet.home")).forward(request, response);
+                redirectToPage(request, response, Configuration.getProperty("servlet.home"));
             } catch (Exception ex) {
                 request.setAttribute(ERROR, ERROR_WAS_AN_ERROR + ex.getMessage());
-                request.getRequestDispatcher(Configuration.getProperty("servlet.home")).forward(request, response);
+                redirectToPage(request, response, Configuration.getProperty("servlet.home"));
             }
         } else {
-            request.getRequestDispatcher(Configuration.getProperty("page.login")).forward(request, response);
+            redirectToPage(request, response, Configuration.getProperty("page.login"));
         }
     }
 

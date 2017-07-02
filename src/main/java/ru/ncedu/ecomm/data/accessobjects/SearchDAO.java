@@ -10,5 +10,7 @@ public interface SearchDAO {
 
     Search addNewSearch(Search search);
 
-    Search removeSearch(Search search);
+    void removeSearch(long searchId);
+
+    Search getSearchById(long searchId);
 }

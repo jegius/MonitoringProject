@@ -7,11 +7,18 @@ public class SearchBuilder {
     private long userId;
     private String fileOriginalName;
     private String filePath;
+    private String fileDirectoryPath;
     private String creationDate;
     private String lastSearchDate;
     private long productQuantity;
 
     public SearchBuilder() {
+    }
+
+    public SearchBuilder setFileDirectoryPath(String fileDirectoryPath) {
+        this.fileDirectoryPath = fileDirectoryPath;
+
+        return this;
     }
 
     public SearchBuilder setId(long id) {
@@ -61,6 +68,7 @@ public class SearchBuilder {
                 id,
                 userId,
                 filePath,
+                fileDirectoryPath,
                 fileOriginalName,
                 creationDate,
                 lastSearchDate,
