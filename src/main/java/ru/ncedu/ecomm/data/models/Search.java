@@ -1,6 +1,6 @@
 package ru.ncedu.ecomm.data.models;
 
-import java.sql.Date;
+import java.util.List;
 
 public class Search {
     private long id;
@@ -11,6 +11,7 @@ public class Search {
     private String creationDate;
     private String lastSearchDate;
     private long productQuantity;
+    private List<Search> searchItemList;
 
     public Search() {
     }
@@ -22,7 +23,8 @@ public class Search {
                   String fileOriginalName,
                   String creationDate,
                   String lastSearchDate,
-                  long productQuantity) {
+                  long productQuantity,
+                  List<Search> searchItemList) {
 
         this.id = id;
         this.userId = userId;
@@ -32,10 +34,19 @@ public class Search {
         this.creationDate = creationDate;
         this.lastSearchDate = lastSearchDate;
         this.productQuantity = productQuantity;
+        this.searchItemList = searchItemList;
     }
 
     public String getFileDirectoryPath() {
         return fileDirectoryPath;
+    }
+
+    public List<Search> getSearchItemList() {
+        return searchItemList;
+    }
+
+    public void setSearchItemList(List<Search> searchItemList) {
+        this.searchItemList = searchItemList;
     }
 
     public void setFileDirectoryPath(String fileDirectoryPath) {

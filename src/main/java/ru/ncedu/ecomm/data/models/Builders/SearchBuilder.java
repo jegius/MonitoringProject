@@ -2,6 +2,8 @@ package ru.ncedu.ecomm.data.models.Builders;
 
 import ru.ncedu.ecomm.data.models.Search;
 
+import java.util.List;
+
 public class SearchBuilder {
     private long id;
     private long userId;
@@ -11,6 +13,7 @@ public class SearchBuilder {
     private String creationDate;
     private String lastSearchDate;
     private long productQuantity;
+    private List<Search> searchItemList;
 
     public SearchBuilder() {
     }
@@ -63,6 +66,12 @@ public class SearchBuilder {
         return this;
     }
 
+    public SearchBuilder setSearchItemList(List<Search> searchItemList) {
+        this.searchItemList = searchItemList;
+
+        return this;
+    }
+
     public Search build(){
         return new Search(
                 id,
@@ -72,7 +81,8 @@ public class SearchBuilder {
                 fileOriginalName,
                 creationDate,
                 lastSearchDate,
-                productQuantity
+                productQuantity,
+                searchItemList
         );
     }
 }

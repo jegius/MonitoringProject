@@ -41,7 +41,7 @@ public class SearchService {
         searchDAO.removeSearch(Long.parseLong(parameter));
     }
 
-    public static void recursiveDelete(File file) {
+    private static void recursiveDelete(File file) {
         // до конца рекурсивного цикла
         if (!file.exists())
             return;
@@ -55,6 +55,6 @@ public class SearchService {
         }
         // вызываем метод delete() для удаления файлов и пустых(!) папок
         file.delete();
-        System.out.println("Удаленный файл или папка: " + file.getAbsolutePath());
+        System.out.println("[DEBUG] Удален файл или папка: " + file.getAbsolutePath());
     }
 }

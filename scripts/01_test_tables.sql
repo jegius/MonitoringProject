@@ -38,6 +38,7 @@ ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
 CREATE TABLE search (
   search_id bigint NOT NULL PRIMARY KEY,
   user_id bigint,
+  search_status bigint,
   file_path character(200),
   file_directory_path character(200),
   file_original_name character(200),
