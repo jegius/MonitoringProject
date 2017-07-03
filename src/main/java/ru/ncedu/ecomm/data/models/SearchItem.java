@@ -1,17 +1,64 @@
 package ru.ncedu.ecomm.data.models;
 
 public class SearchItem {
+    private long searchItemId;
+    private String itemType;
+    private String brand;
+    private long itemCode;
     private String productName;
-    private long search_id;
     private long productPrice;
+    private long searchId;
 
     public SearchItem() {
     }
 
-    public SearchItem(String productName, long search_id, long productPrice) {
+    public SearchItem(long searchItemId,
+                      String itemType,
+                      String brand,
+                      long itemCode,
+                      String productName,
+                      long productPrice,
+                      long searchId) {
+
+        this.searchItemId = searchItemId;
+        this.itemType = itemType;
+        this.brand = brand;
+        this.itemCode = itemCode;
         this.productName = productName;
-        this.search_id = search_id;
         this.productPrice = productPrice;
+        this.searchId = searchId;
+    }
+
+    public long getSearchItemId() {
+        return searchItemId;
+    }
+
+    public void setSearchItemId(long searchItemId) {
+        this.searchItemId = searchItemId;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public long getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(long itemCode) {
+        this.itemCode = itemCode;
     }
 
     public String getProductName() {
@@ -22,12 +69,12 @@ public class SearchItem {
         this.productName = productName;
     }
 
-    public long getSearch_id() {
-        return search_id;
+    public long getSearchId() {
+        return searchId;
     }
 
-    public void setSearch_id(long search_id) {
-        this.search_id = search_id;
+    public void setSearchId(long search_id) {
+        this.searchId = searchId;
     }
 
     public long getProductPrice() {

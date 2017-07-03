@@ -5,7 +5,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import ru.ncedu.ecomm.data.DAOFactory;
+import ru.ncedu.ecomm.data.models.Builders.SearchItemBuilder;
 import ru.ncedu.ecomm.data.models.Search;
+import ru.ncedu.ecomm.data.models.SearchItem;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "SearchFileViewServlet", urlPatterns = {"/viewSearch"})
 public class SearchFileViewServlet extends HttpServlet {
@@ -46,6 +50,7 @@ public class SearchFileViewServlet extends HttpServlet {
 
     private void doAction(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         long searchId = Long.parseLong(req.getParameter(SEARCH_ID));
+        List<SearchItem> searchItems = new ArrayList<>();
 
         Search search = DAOFactory
                 .getDAOFactory()
@@ -59,12 +64,20 @@ public class SearchFileViewServlet extends HttpServlet {
 
         Sheet sheet = workbook.getSheetAt(0);
         for (Row row : sheet) {
-            if (row.getOutlineLevel() > MAX_LEVEL
+            if (row.getOutlineLevel() == MAX_LEVEL
                     && row.getCell(FIRST_COLUMN).getCellType()
                     == Cell.CELL_TYPE_NUMERIC) {
 
-                row.getCell(0);
+                SearchItem searchItem = new SearchItemBuilder()
+                        .setSearchItemId(Long.parseLong(row.getCell(ITEM_ID_COMLUMN).toString()))
+                        .setItemType(row.getCell(ITEM_TYPE).toString())
+                        .setBrand(row.getCell(ITEM_BRAND).toString())
+                        .setItemCode(Long.parseLong(row.getCell(ITEM_CODE).toString()))
+                        .setProductName(row.getCell(ITEM_NAME).toString())
+                        .setProductPrice(Long.parseLong(row.getCell(PRICE).toString()))
+                        .build();
 
+                searchItems.add(searchItem);
             }
         }
     }
