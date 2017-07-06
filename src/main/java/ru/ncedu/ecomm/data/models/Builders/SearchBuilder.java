@@ -7,6 +7,7 @@ import java.util.List;
 public class SearchBuilder {
     private long id;
     private long userId;
+    private int searchStatus;
     private String fileOriginalName;
     private String filePath;
     private String fileDirectoryPath;
@@ -20,6 +21,12 @@ public class SearchBuilder {
 
     public SearchBuilder setFileDirectoryPath(String fileDirectoryPath) {
         this.fileDirectoryPath = fileDirectoryPath;
+
+        return this;
+    }
+
+    public SearchBuilder setSearchStatus(int searchStatus) {
+        this.searchStatus = searchStatus;
 
         return this;
     }
@@ -76,6 +83,7 @@ public class SearchBuilder {
         return new Search(
                 id,
                 userId,
+                searchStatus,
                 filePath,
                 fileDirectoryPath,
                 fileOriginalName,

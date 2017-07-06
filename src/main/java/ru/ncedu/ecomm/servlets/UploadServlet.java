@@ -39,6 +39,7 @@ public class UploadServlet extends HttpServlet {
     private static final String WIN_1251 = "windows-1251";
     private static final String UTF_8 = "UTF-8";
     private static final String UPLOAD_DIRECTORY = "upload";
+    private static final long UPLOADED_FILE_STATUS = 0;
     private static final int THRESHOLD_SIZE = 1024 * 1024 * 3;  // 3MB
     private static final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
     private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
@@ -128,6 +129,7 @@ public class UploadServlet extends HttpServlet {
 
                         Search search = new SearchBuilder()
                                 .setCreationDate(date)
+                                .setSearchStatus(UPLOADED_FILE_STATUS)
                                 .setFileDirectoryPath(uploadPath)
                                 .setFilePath(uploadPath + File.separator + newFileName)
                                 .setFileOriginalName(fileName)

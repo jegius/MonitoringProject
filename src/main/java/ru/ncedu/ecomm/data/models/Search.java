@@ -5,6 +5,7 @@ import java.util.List;
 public class Search {
     private long id;
     private long userId;
+    private int searchStatus;
     private String filePath;
     private String fileDirectoryPath;
     private String fileOriginalName;
@@ -18,6 +19,7 @@ public class Search {
 
     public Search(long id,
                   long userId,
+                  int searchStatus,
                   String filePath,
                   String fileDirectoryPath,
                   String fileOriginalName,
@@ -28,6 +30,7 @@ public class Search {
 
         this.id = id;
         this.userId = userId;
+        this.searchStatus = searchStatus;
         this.filePath = filePath;
         this.fileDirectoryPath = fileDirectoryPath;
         this.fileOriginalName = fileOriginalName;
@@ -35,6 +38,14 @@ public class Search {
         this.lastSearchDate = lastSearchDate;
         this.productQuantity = productQuantity;
         this.searchItemList = searchItemList;
+    }
+
+    public int getSearchStatus() {
+        return searchStatus;
+    }
+
+    public void setSearchStatus(int searchStatus) {
+        this.searchStatus = searchStatus;
     }
 
     public String getFileDirectoryPath() {
