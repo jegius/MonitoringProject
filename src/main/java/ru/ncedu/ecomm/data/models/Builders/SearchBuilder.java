@@ -1,6 +1,7 @@
 package ru.ncedu.ecomm.data.models.Builders;
 
 import ru.ncedu.ecomm.data.models.Search;
+import ru.ncedu.ecomm.data.models.SearchItem;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class SearchBuilder {
     private String creationDate;
     private String lastSearchDate;
     private long productQuantity;
-    private List<Search> searchItemList;
+    private List<SearchItem> searchItemList;
 
     public SearchBuilder() {
     }
@@ -73,7 +74,7 @@ public class SearchBuilder {
         return this;
     }
 
-    public SearchBuilder setSearchItemList(List<Search> searchItemList) {
+    public SearchBuilder setSearchItemList(List<SearchItem> searchItemList) {
         this.searchItemList = searchItemList;
 
         return this;

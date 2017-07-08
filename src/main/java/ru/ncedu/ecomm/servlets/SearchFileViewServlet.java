@@ -27,9 +27,10 @@ import java.util.List;
 @WebServlet(name = "SearchFileViewServlet", urlPatterns = {"/view"})
 public class SearchFileViewServlet extends HttpServlet {
     private static final int NO_SEARCH_ITEMS = 0;
-    private static final int ITEMS_ALREADY_EXIST = 1;
     private static final int SEARCH_LIST_LOADED_TO_BASE = 1;
     private static final String SEARCH_ID = "searchId";
+    private static final String ACTION = "action";
+    private static final String SEARCH_LIST = "searchList";
     private Search search;
 
     @Override
@@ -51,20 +52,41 @@ public class SearchFileViewServlet extends HttpServlet {
 
     }
 
-    private void doAction(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, InvalidFormatException {
-        String servletContext = getServletContext().getRealPath("");
-        long lastColumnIndex;
-        long searchId = Long.parseLong(req.getParameter(SEARCH_ID));
-        List<SearchItem> searchItemList = new ArrayList<>();
+    private void doAction(HttpServletRequest req, HttpServletResponse resp) throws ServletException, InvalidFormatException, IOException {
 
-        search = getSearchFromDAO(searchId);
+        if (req.getParameter(ACTION) == null
+                || req.getParameter(SEARCH_ID) != null) {
+            long searchId = Long.parseLong(req.getParameter(SEARCH_ID));
+            search = getSearchFromDAO(searchId);
+            findActions(req, resp);
+        } else {
+            switch (req.getParameter(ACTION)){
+                case "test":
+                    break;
+            }
+        }
 
-        switch (search.getSearchStatus()){
+    }
+
+    private void findActions(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, InvalidFormatException {
+
+
+        switch (search.getSearchStatus()) {
             case NO_SEARCH_ITEMS: {
+                addSearchItems(req, resp, search);
                 break;
             }
         }
 
+
+    }
+
+    private void addSearchItems(HttpServletRequest req, HttpServletResponse resp, Search search) throws ServletException, IOException {
+
+
+        long lastColumnIndex;
+        List<SearchItem> searchItemList = new ArrayList<>();
+        String servletContext = getServletContext().getRealPath("");
         File file = new File(servletContext + search.getFilePath());
 
         try (FileInputStream inputStream = new FileInputStream(file);
@@ -99,11 +121,16 @@ public class SearchFileViewServlet extends HttpServlet {
 
                 search.setSearchStatus(SEARCH_LIST_LOADED_TO_BASE);
                 updateSearch(search);
+                search.setSearchItemList(searchItemList);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        req.setAttribute(SEARCH_LIST, search);
         req.getRequestDispatcher(Configuration.getProperty("page.viewSearch")).forward(req, resp);
     }
+
 
     private SearchItem createNewSearchItem(ArrayList<String> cellValues) {
         return new SearchItemBuilder()

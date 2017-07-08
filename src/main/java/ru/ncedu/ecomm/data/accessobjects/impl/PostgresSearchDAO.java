@@ -78,7 +78,7 @@ public class PostgresSearchDAO implements SearchDAO {
                              " creation_date, \n" +
                              " last_search_date,\n" +
                              " search_status)\n" +
-                             "VALUES (?, ?, ?, ?, ?, ?, ?)\n" +
+                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)\n" +
                              "RETURNING search_id")) {
 
             statement.setLong(1, search.getUserId());
@@ -180,7 +180,7 @@ public class PostgresSearchDAO implements SearchDAO {
 
             ResultSet resultSet = statement.getResultSet();
             if (resultSet.next()) {
-                searchItem.setSearchItemId(resultSet.getLong(1));
+                searchItem.setSearchId(resultSet.getLong(1));
                 return searchItem;
             }
 
@@ -194,15 +194,15 @@ public class PostgresSearchDAO implements SearchDAO {
     public void updateSearch(Search currentSearch) {
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE search\n" +
-                             "SET search.user_id           = ?,\n" +
-                             "  search.product_quantity    = ?,\n" +
-                             "  search.file_path           = ?,\n" +
-                             "  search.last_search_date    = ?,\n" +
-                             "  search.search_status       = ?,\n" +
-                             "  search.file_directory_path = ?,\n" +
-                             "  search.file_original_name  = ?,\n" +
-                             "  search.creation_date       = ?\n" +
+                     "UPDATE search \n" +
+                             "SET user_id           = ?,\n" +
+                             "  product_quantity    = ?,\n" +
+                             "  file_path           = ?,\n" +
+                             "  last_search_date    = ?,\n" +
+                             "  search_status       = ?,\n" +
+                             "  file_directory_path = ?,\n" +
+                             "  file_original_name  = ?,\n" +
+                             "  creation_date       = ?\n" +
                              "WHERE search_id = ?"
              )) {
 

@@ -40,7 +40,7 @@ public class SearchItem {
         return searchId;
     }
 
-    public void setSearchId(long search_id) {
+    public void setSearchId(long searchId) {
         this.searchId = searchId;
     }
 

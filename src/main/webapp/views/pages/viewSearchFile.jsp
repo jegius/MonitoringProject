@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Управление пользователями</title>
+    <title>Просмотр листа мониторинга</title>
     <c:import url="../fragments/head.jsp"/>
 </head>
 <body>

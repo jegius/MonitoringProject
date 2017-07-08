@@ -12,7 +12,7 @@ public class Search {
     private String creationDate;
     private String lastSearchDate;
     private long productQuantity;
-    private List<Search> searchItemList;
+    private List<SearchItem> searchItemList;
 
     public Search() {
     }
@@ -26,7 +26,7 @@ public class Search {
                   String creationDate,
                   String lastSearchDate,
                   long productQuantity,
-                  List<Search> searchItemList) {
+                  List<SearchItem> searchItemList) {
 
         this.id = id;
         this.userId = userId;
@@ -52,11 +52,11 @@ public class Search {
         return fileDirectoryPath;
     }
 
-    public List<Search> getSearchItemList() {
+    public List<SearchItem> getSearchItemList() {
         return searchItemList;
     }
 
-    public void setSearchItemList(List<Search> searchItemList) {
+    public void setSearchItemList(List<SearchItem> searchItemList) {
         this.searchItemList = searchItemList;
     }
 
