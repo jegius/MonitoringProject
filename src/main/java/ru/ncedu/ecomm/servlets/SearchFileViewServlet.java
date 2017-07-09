@@ -11,6 +11,8 @@ import ru.ncedu.ecomm.data.DAOFactory;
 import ru.ncedu.ecomm.data.models.Builders.SearchItemBuilder;
 import ru.ncedu.ecomm.data.models.Search;
 import ru.ncedu.ecomm.data.models.SearchItem;
+import ru.ncedu.ecomm.data.models.Store;
+import ru.ncedu.ecomm.servlets.services.PageParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,11 +31,15 @@ import java.util.List;
 public class SearchFileViewServlet extends HttpServlet {
     private static final int NO_SEARCH_ITEMS = 0;
     private static final String USER = "user";
+    private static final String STORE_ID = "storeId";
+    private static final String STORE = "stores";
     private static final int SEARCH_LIST_LOADED_TO_BASE = 1;
     private static final String SEARCH_ID = "searchId";
     private static final String ACTION = "action";
     private static final String SEARCH_LIST = "searchList";
+    private static final String DO_SEARCH = "doSearch";
     private Search search;
+    private List<Store> storeList;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,6 +61,11 @@ public class SearchFileViewServlet extends HttpServlet {
     }
 
     private void doAction(HttpServletRequest req, HttpServletResponse resp) throws ServletException, InvalidFormatException, IOException {
+        storeList = DAOFactory
+                .getDAOFactory()
+                .getStoreDAO()
+                .getStoreList();
+
         HttpSession session = req.getSession();
         boolean isAuthorized = session.getAttribute(USER) != null;
         if (isAuthorized) {
@@ -72,7 +83,8 @@ public class SearchFileViewServlet extends HttpServlet {
                 }
             } else {
                 switch (req.getParameter(ACTION)) {
-                    case "test":
+                    case DO_SEARCH:
+                        findProductOnStore(req, resp);
                         break;
                 }
             }
@@ -80,6 +92,13 @@ public class SearchFileViewServlet extends HttpServlet {
             req.getRequestDispatcher(Configuration.getProperty("servlet.login")).forward(req, resp);
         }
 
+    }
+
+    private void findProductOnStore(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        long storeId = Long.parseLong(req.getParameter(STORE_ID));
+        List<SearchItem> searchItems = PageParser
+                .getInstance()
+                .findItems(search.getSearchItemList(), storeId);
     }
 
     private void findActions(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, InvalidFormatException {
@@ -107,6 +126,7 @@ public class SearchFileViewServlet extends HttpServlet {
 
         search.setSearchItemList(searchItems);
 
+        req.setAttribute(STORE, storeList);
         req.setAttribute(SEARCH_LIST, search);
         req.getRequestDispatcher(Configuration.getProperty("page.viewSearch")).forward(req, resp);
     }
@@ -157,7 +177,7 @@ public class SearchFileViewServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        req.setAttribute(STORE, storeList);
         req.setAttribute(SEARCH_LIST, search);
         req.getRequestDispatcher(Configuration.getProperty("page.viewSearch")).forward(req, resp);
     }

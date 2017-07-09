@@ -2,6 +2,7 @@
 -- PostgreSQL database dump
 --
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS stores CASCADE;
 DROP TABLE IF EXISTS search CASCADE;
 DROP TABLE IF EXISTS search_item CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
@@ -104,7 +105,8 @@ CREATE TABLE roles (
   name    CHARACTER VARYING(100) NOT NULL
 );
 
---
+
+
 -- Name: roles_role_id_seq; Type: SEQUENCE; Schema: public
 --
 
@@ -116,11 +118,31 @@ NO MAXVALUE
 CACHE 1;
 
 --
+--
 -- Name: roles_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public
 --
 ALTER TABLE roles
   ALTER COLUMN role_id SET DEFAULT nextval('roles_role_id_seq');
 ALTER SEQUENCE roles_role_id_seq OWNED BY roles.role_id;
+
+
+CREATE TABLE stores (
+  id BIGINT                 NOT NULL PRIMARY KEY,
+  name    CHARACTER VARYING(100) NOT NULL,
+  search_base_link CHARACTER VARYING(100)
+);
+
+CREATE SEQUENCE stores_store_id_seq
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
+
+ALTER TABLE stores
+  ALTER COLUMN id SET DEFAULT nextval('stores_store_id_seq');
+ALTER SEQUENCE stores_store_id_seq OWNED BY stores.id;
+
 
 
 ALTER TABLE ONLY users
@@ -135,11 +157,18 @@ ALTER TABLE ONLY search_item
 ALTER SEQUENCE users_user_id_seq RESTART WITH 1;
 ALTER SEQUENCE search_search_id_seq RESTART WITH 1;
 ALTER SEQUENCE search_search_item_seq RESTART WITH 1;
+ALTER SEQUENCE stores_store_id_seq RESTART WITH 1;
 ALTER SEQUENCE roles_role_id_seq RESTART WITH 1;
 
 INSERT INTO roles (name)
 VALUES ('SuperUser'),
   ('User');
 
-INSERT INTO users (user_id, role_id, user_login, user_password)
-VALUES (1, 1, 'jegius', '20503573445431994242781524265713587176');
+INSERT INTO users (role_id, user_login, user_password)
+VALUES (1, 'jegius', '20503573445431994242781524265713587176');
+
+INSERT INTO stores (name, search_base_link)
+VALUES ('M-video', 'http://www.mvideo.ru/product-list-page-cls?q=');
+
+INSERT INTO stores (name, search_base_link)
+VALUES ('Eldorado', 'http://www.eldorado.ru/search/catalog.php?q=');

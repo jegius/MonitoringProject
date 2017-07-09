@@ -12,6 +12,8 @@ public abstract class DAOFactory {
 
     public abstract SearchDAO getSearchDAO();
 
+    public abstract StoreDAO getStoreDAO();
+
     public static DAOFactory getDAOFactory() {
 
         switch (Configuration.getProperty("db.type")) {
@@ -31,6 +33,11 @@ public abstract class DAOFactory {
                     @Override
                     public SearchDAO getSearchDAO() {
                         return new PostgresSearchDAO();
+                    }
+
+                    @Override
+                    public StoreDAO getStoreDAO() {
+                        return new PostgresStoreDAO();
                     }
                 };
             default:
