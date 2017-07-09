@@ -2,6 +2,7 @@ package ru.ncedu.ecomm.data.accessobjects.impl;
 
 import ru.ncedu.ecomm.data.accessobjects.SearchDAO;
 import ru.ncedu.ecomm.data.models.Builders.SearchBuilder;
+import ru.ncedu.ecomm.data.models.Builders.SearchItemBuilder;
 import ru.ncedu.ecomm.data.models.Search;
 import ru.ncedu.ecomm.data.models.SearchItem;
 import ru.ncedu.ecomm.utils.DBUtils;
@@ -18,9 +19,12 @@ public class PostgresSearchDAO implements SearchDAO {
     private static final String FILE_DIRECTORY_PATH = "file_directory_path";
     private static final String LAST_SEARCH_DATE = "last_search_date";
     private static final String FILE_PATH = "file_path";
-    private static final String SEACH_STATUS = "search_status";
+    private static final String SEARCH_STATUS = "search_status";
     private static final String PRODUCT_QUANTITY = "product_quantity";
     private static final String USER_ID = "user_id";
+    private static final String PRODUCT_NAME = "product_name";
+    private static final String CELL_ID = "cell_id";
+    private static final String PRODUCT_PRICE = "product_price";
 
 
     @Override
@@ -47,7 +51,7 @@ public class PostgresSearchDAO implements SearchDAO {
             while (resultSet.next()) {
                 Search search = new SearchBuilder()
                         .setUserId(userId)
-                        .setSearchStatus(resultSet.getInt(SEACH_STATUS))
+                        .setSearchStatus(resultSet.getInt(SEARCH_STATUS))
                         .setId(resultSet.getLong(SEARCH_ID))
                         .setFileOriginalName(resultSet.getString(FILE_ORIGINAL_NAME))
                         .setFileDirectoryPath(resultSet.getString(FILE_DIRECTORY_PATH))
@@ -150,7 +154,7 @@ public class PostgresSearchDAO implements SearchDAO {
                         .setLastSearchDate(resultSet.getString(LAST_SEARCH_DATE))
                         .setFilePath(resultSet.getString(FILE_PATH))
                         .setProductQuantity(resultSet.getLong(PRODUCT_QUANTITY))
-                        .setSearchStatus(resultSet.getInt(SEACH_STATUS))
+                        .setSearchStatus(resultSet.getInt(SEARCH_STATUS))
                         .build();
             }
         } catch (SQLException e) {
@@ -220,5 +224,41 @@ public class PostgresSearchDAO implements SearchDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<SearchItem> getSearchItemsBySearchId(long id) {
+        List<SearchItem> searchItems = new ArrayList<>();
+
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT\n" +
+                             "  search_item_id,\n" +
+                             "  product_price,\n" +
+                             "  product_name,\n" +
+                             "  cell_id\n" +
+                             "FROM search_item " +
+                             "WHERE search_id = ?")) {
+
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                SearchItem searchItem = new SearchItemBuilder()
+                        .setSearchId(id)
+                        .setSearchItemId(resultSet.getLong(CELL_ID))
+                        .setProductName(resultSet.getString(PRODUCT_NAME))
+                        .setProductPrice(resultSet.getLong(PRODUCT_PRICE))
+                        .build();
+
+                searchItems.add(searchItem);
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return searchItems;
     }
 }

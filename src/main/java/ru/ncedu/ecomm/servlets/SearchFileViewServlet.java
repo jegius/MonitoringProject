@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.util.List;
 @WebServlet(name = "SearchFileViewServlet", urlPatterns = {"/view"})
 public class SearchFileViewServlet extends HttpServlet {
     private static final int NO_SEARCH_ITEMS = 0;
+    private static final String USER = "user";
     private static final int SEARCH_LIST_LOADED_TO_BASE = 1;
     private static final String SEARCH_ID = "searchId";
     private static final String ACTION = "action";
@@ -53,17 +55,29 @@ public class SearchFileViewServlet extends HttpServlet {
     }
 
     private void doAction(HttpServletRequest req, HttpServletResponse resp) throws ServletException, InvalidFormatException, IOException {
+        HttpSession session = req.getSession();
+        boolean isAuthorized = session.getAttribute(USER) != null;
+        if (isAuthorized) {
+            if (req.getParameter(ACTION) == null
+                    || req.getParameter(SEARCH_ID) != null) {
 
-        if (req.getParameter(ACTION) == null
-                || req.getParameter(SEARCH_ID) != null) {
-            long searchId = Long.parseLong(req.getParameter(SEARCH_ID));
-            search = getSearchFromDAO(searchId);
-            findActions(req, resp);
-        } else {
-            switch (req.getParameter(ACTION)){
-                case "test":
-                    break;
+                long searchId = Long.parseLong(req.getParameter(SEARCH_ID));
+
+                if (getSearchFromDAO(searchId) != null) {
+
+                    search = getSearchFromDAO(searchId);
+                    findActions(req, resp);
+                } else {
+                    req.getRequestDispatcher(Configuration.getProperty("servlet.home")).forward(req, resp);
+                }
+            } else {
+                switch (req.getParameter(ACTION)) {
+                    case "test":
+                        break;
+                }
             }
+        } else {
+            req.getRequestDispatcher(Configuration.getProperty("servlet.login")).forward(req, resp);
         }
 
     }
@@ -73,7 +87,11 @@ public class SearchFileViewServlet extends HttpServlet {
 
         switch (search.getSearchStatus()) {
             case NO_SEARCH_ITEMS: {
-                addSearchItems(req, resp, search);
+                addSearchItems(req, resp);
+                break;
+            }
+            case SEARCH_LIST_LOADED_TO_BASE: {
+                viewSearchFromDataBase(req, resp);
                 break;
             }
         }
@@ -81,7 +99,19 @@ public class SearchFileViewServlet extends HttpServlet {
 
     }
 
-    private void addSearchItems(HttpServletRequest req, HttpServletResponse resp, Search search) throws ServletException, IOException {
+    private void viewSearchFromDataBase(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<SearchItem> searchItems = DAOFactory
+                .getDAOFactory()
+                .getSearchDAO()
+                .getSearchItemsBySearchId(search.getId());
+
+        search.setSearchItemList(searchItems);
+
+        req.setAttribute(SEARCH_LIST, search);
+        req.getRequestDispatcher(Configuration.getProperty("page.viewSearch")).forward(req, resp);
+    }
+
+    private void addSearchItems(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
         long lastColumnIndex;
@@ -120,6 +150,7 @@ public class SearchFileViewServlet extends HttpServlet {
                         .addNewSearchItem(createNewSearchItem(cellValues)));
 
                 search.setSearchStatus(SEARCH_LIST_LOADED_TO_BASE);
+                search.setProductQuantity(searchItemList.size());
                 updateSearch(search);
                 search.setSearchItemList(searchItemList);
             }

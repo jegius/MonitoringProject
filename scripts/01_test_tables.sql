@@ -139,7 +139,7 @@ ALTER SEQUENCE roles_role_id_seq RESTART WITH 1;
 
 INSERT INTO roles (name)
 VALUES ('SuperUser'),
-  ('Users');
+  ('User');
 
 INSERT INTO users (user_id, role_id, user_login, user_password)
 VALUES (1, 1, 'jegius', '20503573445431994242781524265713587176');

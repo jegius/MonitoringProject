@@ -18,4 +18,6 @@ public interface SearchDAO {
     SearchItem addNewSearchItem(SearchItem searchItem);
 
     void updateSearch(Search currentSearch);
+
+    List<SearchItem> getSearchItemsBySearchId(long id);
 }

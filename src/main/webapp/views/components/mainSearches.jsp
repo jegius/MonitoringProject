@@ -14,6 +14,16 @@
                         </div>
                         <p><b>${searchItem.fileOriginalName}</b></p>
                         <p>Загружен: <b>${searchItem.creationDate}</b></p>
+
+                        <c:if test="${searchItem.searchStatus == 0}">
+                            <p><b>Продукты еще не загружены</b></p>
+                        </c:if>
+                        <c:if test="${searchItem.searchStatus == 1 && searchItem.productQuantity == 0}">
+                            <p><b>В файле не найдено записей</b></p>
+                        </c:if>
+                        <c:if test="${searchItem.productQuantity > 0}">
+                            <p>Всего продуктов: <b>${searchItem.productQuantity}</b></p>
+                        </c:if>
                     </c:if>
                     <c:if test="${searchItem.lastSearchDate}">
                         <div class="ui green top attached label">
@@ -24,7 +34,7 @@
                         <p>Всего единиц:<b>${searchItem.productQuantity}</b></p>
                     </c:if>
                     <div class="item">
-                        <button class="ui fluid animated primary button jsGoToSearch">
+                        <button class="ui fluid animated primary button jsGoToSearch" value="${searchItem.id}">
                             <div class="visible content">Перейти</div>
                             <div class="hidden content">
                                 <i class="right arrow icon"></i>
@@ -32,7 +42,7 @@
                         </button>
                     </div>
                     <div class="item">
-                        <button class="ui fluid red animated red button jsRemove"  value="${searchItem.id}">
+                        <button class="ui fluid red animated red button jsRemove" value="${searchItem.id}">
                             <div class="visible content">Удалить</div>
                             <div class="hidden content">
                                 <i class="right remove icon"></i>
@@ -41,6 +51,7 @@
                     </div>
                 </div>
             </div>
+
         </c:forEach>
         <div class="column jsSearchItem">
             <div class="ui center aligned segment">

@@ -5,7 +5,8 @@
         SEARCH_COMPONENT: '.jsSearchComponent',
         SEARCH_ITEMS_CONTAINER: '.jsSearchItemContainer',
         VALUE: '.jsValue',
-        REMOVE_BUTTON: '.jsRemove'
+        REMOVE_BUTTON: '.jsRemove',
+        VIEW_FILE: '.jsGoToSearch'
     };
 
     var EVENTS = {
@@ -31,11 +32,13 @@
          */
         init: function () {
 
+            this.content.find(ELEMENTS.VIEW_FILE).on('click', this.redirectToPage.bind(this));
             this.content.find(ELEMENTS.ADD_FILE_BUTTON).on('click', this.showModal);
             this.content.find(ELEMENTS.REMOVE_BUTTON).on('click', this.removeSearch.bind(this));
         },
         removeSearch: function (e) {
             var $searchId = $(e.currentTarget).val();
+
 
             $.post(this.params.mainSearch + LINKS.HOME,
                 {
@@ -45,6 +48,14 @@
                     this.refreshPage();
                 }.bind(this));
         },
+
+        redirectToPage: function (e) {
+            var $this = $(e.currentTarget);
+            var $searchId = $this.val();
+
+            document.location = this.params.mainSearch + '/view?searchId=' + $searchId;
+        },
+
         showModal: function () {
             frm.events.fire(EVENTS.SHOW_MODAL);
         },

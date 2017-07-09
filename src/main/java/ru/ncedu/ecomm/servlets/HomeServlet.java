@@ -45,7 +45,7 @@ public class HomeServlet extends HttpServlet {
 
             findAnswer(request, response);
         } else {
-            request.getRequestDispatcher(Configuration.getProperty("page.login")).forward(request, response);
+            request.getRequestDispatcher(Configuration.getProperty("servlet.login")).forward(request, response);
         }
     }
 

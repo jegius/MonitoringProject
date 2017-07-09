@@ -9,7 +9,7 @@
     <c:import url="../fragments/head.jsp"/>
 </head>
 <body>
-<div class="ui container" style="height: 10em"></div>
+<div class="ui container" style="min-height: 10em"></div>
     <c:import url="../components/login.jsp"/>
 </body>
 </html>

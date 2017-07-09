@@ -11,11 +11,11 @@
 <body>
 <c:import url="../fragments/topPanel.jsp"/>
 
-<div class="ui container jsContent" style="height: 10em">
+<div class="ui container jsContent" style="min-height: 10em">
     <c:import url="../components/userManagement.jsp"/>
-    <div class="ui container" style="height: 10em"></div>
+    <div class="ui container" style="min-height: 10em"></div>
     <c:import url="../components/usersTable.jsp"/>
 </div>
-<div class="ui container" style="height: 10em"></div>
+<div class="ui container" style="min-height: 10em"></div>
 </body>
 </html>
