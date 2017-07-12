@@ -94,11 +94,16 @@ public class SearchFileViewServlet extends HttpServlet {
 
     }
 
-    private void findProductOnStore(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void findProductOnStore(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         long storeId = Long.parseLong(req.getParameter(STORE_ID));
         List<SearchItem> searchItems = PageParser
                 .getInstance()
                 .findItems(search.getSearchItemList(), storeId);
+        search.setSearchItemList(searchItems);
+
+        req.setAttribute(STORE, storeList);
+        req.setAttribute(SEARCH_LIST, search);
+        req.getRequestDispatcher(Configuration.getProperty("page.viewSearch")).forward(req, resp);
     }
 
     private void findActions(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, InvalidFormatException {
